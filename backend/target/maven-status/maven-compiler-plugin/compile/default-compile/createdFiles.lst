@@ -1,0 +1,10 @@
+com/marcothegathering/backend/model/Card.class
+com/marcothegathering/backend/repository/CardRepository.class
+com/marcothegathering/backend/controller/CardController.class
+com/marcothegathering/backend/service/ScryfallService.class
+com/marcothegathering/backend/model/scryfall/ScryfallCard.class
+com/marcothegathering/backend/model/scryfall/ScryfallSearchResponse.class
+com/marcothegathering/backend/config/ScryfallConfig.class
+com/marcothegathering/backend/MtgEvaluatorApplication.class
+com/marcothegathering/backend/controller/CollectionController.class
+com/marcothegathering/backend/service/CollectionService.class

@@ -1,0 +1,11 @@
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/model/Card.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/model/scryfall/ScryfallCard.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/controller/CardController.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/service/CollectionService.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/repository/CardRepository.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/config/SecurityConfig.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/config/ScryfallConfig.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/service/ScryfallService.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/MtgEvaluatorApplication.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/model/scryfall/ScryfallSearchResponse.java
+/home/marco/github/marcothegathering/backend/src/main/java/com/marcothegathering/backend/controller/CollectionController.java
