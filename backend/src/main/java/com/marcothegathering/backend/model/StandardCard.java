@@ -2,38 +2,48 @@ package com.marcothegathering.backend.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 
-@Document(collection = "cards")
-public class Card {
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Document(collection = "standard_cards")
+public class StandardCard {
 
     @Id
     private String id; // Scryfall ID
-    private String userId; // Owner of this card
+
+    @Indexed
     private String name;
+
     private String manaCost;
+
+    @Indexed
     private String typeLine;
+
+    @TextIndexed
     private String oracleText;
+
     private String power;
     private String toughness;
+
+    @Indexed
+    private List<String> colors;
+
+    @Indexed
+    private String rarity;
+
+    @Indexed
+    private String setCode;
+
     private String imageUrl;
     private String backImageUrl; // For double-sided cards
-    private boolean collected;
-    // Add other fields as needed, e.g. quantity, cleanliness, foil status
 
-    public Card() {
-    }
+    private LocalDateTime lastUpdated;
 
-    public Card(String id, String name, String manaCost, String typeLine, String oracleText, String power,
-            String toughness, String imageUrl, boolean collected) {
-        this.id = id;
-        this.name = name;
-        this.manaCost = manaCost;
-        this.typeLine = typeLine;
-        this.oracleText = oracleText;
-        this.power = power;
-        this.toughness = toughness;
-        this.imageUrl = imageUrl;
-        this.collected = collected;
+    public StandardCard() {
+        this.lastUpdated = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -44,14 +54,6 @@ public class Card {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getName() {
@@ -102,6 +104,30 @@ public class Card {
         this.toughness = toughness;
     }
 
+    public List<String> getColors() {
+        return colors;
+    }
+
+    public void setColors(List<String> colors) {
+        this.colors = colors;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(String rarity) {
+        this.rarity = rarity;
+    }
+
+    public String getSetCode() {
+        return setCode;
+    }
+
+    public void setSetCode(String setCode) {
+        this.setCode = setCode;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -118,11 +144,11 @@ public class Card {
         this.backImageUrl = backImageUrl;
     }
 
-    public boolean isCollected() {
-        return collected;
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 
-    public void setCollected(boolean collected) {
-        this.collected = collected;
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

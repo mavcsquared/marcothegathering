@@ -17,17 +17,25 @@ public class CollectionService {
         this.cardRepository = cardRepository;
     }
 
-    public List<Card> getCollection() {
-        return cardRepository.findAll();
+    public List<Card> getCollection(String userId) {
+        return cardRepository.findAll().stream()
+                .filter(card -> userId.equals(card.getUserId()))
+                .toList();
     }
 
-    public Card addToCollection(ScryfallCard scryfallCard) {
-        if (cardRepository.existsById(scryfallCard.id())) {
-            return cardRepository.findById(scryfallCard.id()).get();
+    public Card addToCollection(String userId, ScryfallCard scryfallCard) {
+        // Check if this user already has this card
+        Optional<Card> existing = cardRepository.findAll().stream()
+                .filter(card -> scryfallCard.id().equals(card.getId()) && userId.equals(card.getUserId()))
+                .findFirst();
+
+        if (existing.isPresent()) {
+            return existing.get();
         }
 
         Card card = new Card();
         card.setId(scryfallCard.id());
+        card.setUserId(userId);
         card.setName(scryfallCard.name());
         card.setManaCost(scryfallCard.manaCost());
 
@@ -59,7 +67,11 @@ public class CollectionService {
         return cardRepository.save(card);
     }
 
-    public void removeFromCollection(String id) {
-        cardRepository.deleteById(id);
+    public void removeFromCollection(String userId, String cardId) {
+        // Find the card and verify ownership
+        Optional<Card> card = cardRepository.findById(cardId);
+        if (card.isPresent() && userId.equals(card.get().getUserId())) {
+            cardRepository.deleteById(cardId);
+        }
     }
 }

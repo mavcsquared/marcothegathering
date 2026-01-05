@@ -1,13 +1,21 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Layers } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Layers, LogOut } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = React.useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { isAuthenticated, user, logout } = useAuth();
 
     const isActive = (path: string) => location.pathname === path ? 'text-white bg-surface-lighter' : 'text-gray-300 hover:text-white hover:bg-surface-lighter/50';
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     return (
         <nav className="bg-surface-card border-b border-surface-lighter sticky top-0 z-50"
@@ -19,19 +27,37 @@ export const Navbar: React.FC = () => {
                         <Link to="/" className="flex-shrink-0 text-mana-accent">
                             <Layers size={32} />
                         </Link>
-                        <div className="hidden md:block">
-                            <div className="ml-10 flex items-baseline space-x-4">
-                                <Link to="/" className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/')}`}>Dashboard</Link>
-                                <Link to="/collection" className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/collection')}`}>My Collection</Link>
-                                <a href="#" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Deck Builder</a>
+                        {isAuthenticated && (
+                            <div className="hidden md:block">
+                                <div className="ml-10 flex items-baseline space-x-4">
+                                    <Link to="/" className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/')}`}>Dashboard</Link>
+                                    <Link to="/collection" className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/collection')}`}>My Collection</Link>
+                                    <Link to="/admin" className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/admin')}`}>Admin</Link>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                     <div className="hidden md:block">
-                        <div className="ml-4 flex items-center md:ml-6">
-                            <Button variant="ghost" size="sm">Log In</Button>
-                            <Button variant="primary" size="sm" className="ml-2">Get Started</Button>
-                        </div>
+                        {isAuthenticated && user ? (
+                            <div className="ml-4 flex items-center md:ml-6 gap-3">
+                                {user.profilePicture && (
+                                    <img
+                                        src={user.profilePicture}
+                                        alt={user.name}
+                                        className="h-8 w-8 rounded-full"
+                                    />
+                                )}
+                                <span className="text-sm text-gray-300">{user.name}</span>
+                                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                                    <LogOut size={16} className="mr-2" />
+                                    Logout
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="ml-4 flex items-center md:ml-6">
+                                <Button variant="primary" size="sm" onClick={() => navigate('/login')}>Sign In</Button>
+                            </div>
+                        )}
                     </div>
                     <div className="-mr-2 flex md:hidden">
                         <button

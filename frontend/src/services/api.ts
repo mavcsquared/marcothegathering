@@ -40,6 +40,15 @@ export interface Card {
 
 const API_BASE_URL = '/api';
 
+// Helper function to get auth headers
+const getAuthHeaders = (): HeadersInit => {
+    const token = localStorage.getItem('auth_token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+};
+
 export const api = {
     searchCards: async (query: string): Promise<ScryfallCard[]> => {
         const response = await fetch(`${API_BASE_URL}/cards/search?q=${encodeURIComponent(query)}`);
@@ -52,11 +61,12 @@ export const api = {
     addToCollection: async (card: ScryfallCard): Promise<Card> => {
         const response = await fetch(`${API_BASE_URL}/collection`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(card),
         });
+        if (response.status === 401) {
+            throw new Error('Unauthorized - please login');
+        }
         if (!response.ok) {
             throw new Error('Failed to add card to collection');
         }
@@ -64,7 +74,12 @@ export const api = {
     },
 
     getCollection: async (): Promise<Card[]> => {
-        const response = await fetch(`${API_BASE_URL}/collection`);
+        const response = await fetch(`${API_BASE_URL}/collection`, {
+            headers: getAuthHeaders()
+        });
+        if (response.status === 401) {
+            throw new Error('Unauthorized - please login');
+        }
         if (!response.ok) {
             throw new Error('Failed to fetch collection');
         }
@@ -74,7 +89,11 @@ export const api = {
     removeFromCollection: async (id: string): Promise<void> => {
         const response = await fetch(`${API_BASE_URL}/collection/${id}`, {
             method: 'DELETE',
+            headers: getAuthHeaders()
         });
+        if (response.status === 401) {
+            throw new Error('Unauthorized - please login');
+        }
         if (!response.ok) {
             throw new Error('Failed to remove card from collection');
         }
